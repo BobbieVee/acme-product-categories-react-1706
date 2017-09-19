@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import axios from 'axios';
 
-export default class ProductForm extends Component{
+export default class NewProductForm extends Component{
 	constructor(props){
 		super();
 		this.state = {
@@ -10,19 +10,15 @@ export default class ProductForm extends Component{
 			inStock: false,
 			categoryId: 0
 		}
-		this.product = props.product;
 		this.categories = props.categories;
-		this.deleteProd = props.deleteProd;
-		this.newProductForm = props.newProductForm;
 		this.handleChange =  this.handleChange.bind(this);
 		this.handleSubmit = this.handleSubmit.bind(this);
+		console.log('props = ', props)
 
 	}
 
 	componentDidMount(){
-			let { name, price, inStock, categoryId } = this.product;
-			categoryId = !categoryId? 0 : categoryId;
-			this.setState({name, price, inStock, categoryId})
+
 	}
 
 	handleChange(e){
@@ -34,23 +30,11 @@ export default class ProductForm extends Component{
 	}
 
 	handleSubmit(e){
-		const id = this.product.id;
 		let {name, price, inStock, categoryId} = this.state;
 		categoryId = categoryId === '0'? null: categoryId;
-		if (this.props.newProductForm){
-			axios.post('/api/products', {name, price, inStock, categoryId} )
-		} else {
-			axios.put(`/api/products/${id}`, {name, price, inStock, categoryId})
-			.then(product =>{
-				console.log('success')
-			})
-		}
-
-
+		axios.post('/api/products', {name, price, inStock, categoryId});
 		e.preventDefault();
 	}
-
-
 
 	render(){
 		const {name, price, inStock, categoryId} = this.state;
@@ -90,10 +74,9 @@ export default class ProductForm extends Component{
 	        </label>
 	        <br />
 
-      		<input className='btn btn-primary' type="submit" value="Save" />
-    			<button className='btn btn-danger btn-sm' onClick={() => deleteProd(product.id)}>delete</button>
+        		<input className='btn btn-primary' type="submit" value="Save" />
 
-      	</form>
+      </form>
 			</div>
 		)
 	}
